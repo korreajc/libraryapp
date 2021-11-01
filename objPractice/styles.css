@@ -1,0 +1,79 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+body{
+    margin: 0;
+    padding: 0;
+}
+
+
+#title{
+    padding: 0px;
+    margin: 0px;
+}
+
+#titleTwo{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+#header{
+    display: flex;
+    background-color: blue;
+    width: auto;
+    height: 100px;
+    align-items: center;
+    justify-content:space-between;
+}
+
+#sidebar{
+    width: 200px;
+    height: 100vh;
+    background-color: red;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#statistics{
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.main{
+    display: flex;
+ }
+
+#bookDisplay{
+    display: flex;
+    width: 100vw;
+    height: 100vh;  
+    background-color: turquoise
+}
+
+.smallCard{
+    width: 200px;
+    height: 200px; 
+    margin-left: 10px; 
+    margin-top: 10px;
+    background-color: red;
+    border: solid;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content:space-evenly;
+
+}
+
+.sub1{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
