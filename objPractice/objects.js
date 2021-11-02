@@ -5,13 +5,7 @@ let myLibrary = [
         "author": "George Orwell",
         "pages": 100, 
         "read": false
-    },
-    {
-        "title": "Jose",
-        "author": "George Orwell",
-        "pages": 200, 
-        "read": false
-    }  
+    } 
 ];
 
 function Book(title, author, pages, read){
@@ -92,8 +86,6 @@ document.getElementById("btn").addEventListener("click", function(){
     //append card to main content
     const latestElement = document.getElementById("bookDisplay");
     latestElement.appendChild(card);
-
-    
 });
 
 document.addEventListener('click',function(e){
