@@ -1,11 +1,6 @@
 
 let myLibrary = [
-    {
-        "title": "1984",
-        "author": "George Orwell",
-        "pages": 100, 
-        "read": false
-    } 
+   
 ];
 
 function Book(title, author, pages, read){
@@ -26,11 +21,9 @@ function addBookToLibrary(objArr){
 
 document.getElementById("btn").addEventListener("click", function(){
     const card = document.createElement("div");
-    card.classList.add("smallCard");
+    card.classList.add("smallCardTemp");
     card.setAttribute("id", "tempCard");
     // make div to put header in
-    const cardDiv = document.createElement("div");
-    cardDiv.classList.add("smallCardTitle");
     // make header
     const cardHeaderInput = document.createElement("Label");
     cardHeaderInput.innerHTML = "Enter Book Title: "
@@ -41,9 +34,6 @@ document.getElementById("btn").addEventListener("click", function(){
     bookTitleInput.name = "bookTitleInput"
     bookTitleInput.type = "text";
     //put header within div
-
-    cardDiv.appendChild(cardHeaderInput);
-    cardDiv.appendChild(bookTitleInput);
 
     const p1Label = document.createElement("Label");
     p1Label.innerHTML = "Enter Book Author: "
@@ -64,9 +54,37 @@ document.getElementById("btn").addEventListener("click", function(){
     p2Input.name = "p2Input"
     p2Input.type = "text";
 
-    const p3 = document.createElement("p");
-    const p3Content = document.createTextNode("Read/NotRead");
-    p3.appendChild(p3Content);
+    const readingCheck = document.createElement("div");
+    readingCheck.innerHTML = "Have you read this book?"
+
+
+    const checkMarkDiv = document.createElement("div");
+    checkMarkDiv.classList.add("radioBtns")
+
+    const p3Label = document.createElement("Label");
+    p3Label.innerHTML = "Yes"
+    p3Label.htmlFor = "p3Input"
+
+    const p3Input = document.createElement("INPUT");
+    p3Input.id = "yes";
+    p3Input.name = "p3Input"
+    p3Input.type = "radio";
+    p3Input.value = "yes"
+
+    const p4Label = document.createElement("Label");
+    p4Label.innerHTML = "No"
+    p4Label.htmlFor = "p4Input"
+
+    const p4Input = document.createElement("INPUT");
+    p4Input.id = "no";
+    p4Input.name = "p4Input"
+    p4Input.type = "radio";
+    p4Input.value = "no"
+
+    checkMarkDiv.appendChild(p3Label)
+    checkMarkDiv.appendChild(p3Input)
+    checkMarkDiv.appendChild(p4Label)
+    checkMarkDiv.appendChild(p4Input)
 
     const submit = document.createElement("button");
     submit.setAttribute("id", "subBtn");
@@ -75,12 +93,14 @@ document.getElementById("btn").addEventListener("click", function(){
 
 
 
-    card.appendChild(cardDiv);
+    card.appendChild(cardHeaderInput);
+    card.appendChild(bookTitleInput);
     card.appendChild(p1Label);
     card.appendChild(p1Input)
     card.appendChild(p2Label);
     card.appendChild(p2Input)
-    card.appendChild(p3);
+    card.appendChild(readingCheck)
+    card.appendChild(checkMarkDiv)
     card.appendChild(submit)
 
     //append card to main content
@@ -91,11 +111,19 @@ document.getElementById("btn").addEventListener("click", function(){
 document.addEventListener('click',function(e){
     if(e.target && e.target.id== 'subBtn'){
           //do something
+          var check = false;
+          if(document.getElementById('yes').checked) {
+            //Yes radio button is checked
+            check = true;
+          }else if(document.getElementById('no').checked) {
+            //No radio button is checked
+            check = false;
+          }
           let temp = {
             "title": document.getElementById("bookTitleInput").value,
             "author": document.getElementById("p1Input").value,
             "pages": document.getElementById("p2Input").value,
-            "read": true
+            "read": check,
         }
 
         myLibrary.push(temp);
@@ -104,6 +132,40 @@ document.addEventListener('click',function(e){
         createCard();
      }
  });
+
+ document.addEventListener('click',function(e){
+    if(e.target && e.target.id== 'removeButton'){
+          //do something
+          var parentDiv = e.target.parentNode
+          var index = parentDiv.getAttribute('data-index')
+          myLibrary.splice(index-1, 1);
+          parentDiv.remove();
+          console.log("------")
+          addBookToLibrary(myLibrary);
+
+
+     }
+ });
+
+
+ document.addEventListener('click', function(e){
+    if(e.target && e.target.id== 'notReadP'){
+        var div = e.target;
+        div.innerHTML = "Read"
+        div.id = "readP"
+     }
+ })
+
+ document.addEventListener('click',function(e){
+    if(e.target && e.target.id== 'readP'){
+        var div = e.target;
+        div.innerHTML = "Not Read"
+        div.id = "notReadP"
+     }
+ });
+
+
+
 
  function deleteTemp(){
      var tempCard = document.getElementById("tempCard");
@@ -134,14 +196,25 @@ document.addEventListener('click',function(e){
         p2Text = document.createTextNode(myLibrary[i].pages);
         p2.appendChild(p2Text);
 
+        var bookCheck = "Not Read"
         const p3 = document.createElement("p");
-        const p3Content = document.createTextNode("Read/NotRead");
+        if(myLibrary[i].read){
+            bookCheck = "Read";
+        }
+        const p3Content = document.createTextNode(bookCheck);
         p3.appendChild(p3Content);
+
+        const removeButton = document.createElement("button");
+        buttonText = document.createTextNode("Remove");
+        removeButton.appendChild(buttonText)
+        removeButton.setAttribute("id", "removeButton")
 
         newCard.appendChild(newCardDiv);
         newCard.appendChild(p1)
         newCard.appendChild(p2)
         newCard.appendChild(p3)
+        newCard.appendChild(removeButton)
+        newCard.setAttribute("data-index", i+1)
 
         //append card to main content
         const latestElement = document.getElementById("bookDisplay");
@@ -149,6 +222,7 @@ document.addEventListener('click',function(e){
     }
  }
 
+ //displaying the user inputted card, new
  function createCard(){
     const newCard = document.createElement("div");
     newCard.classList.add("smallCard");
@@ -173,13 +247,28 @@ document.addEventListener('click',function(e){
     p2.appendChild(p2Text);
 
     const p3 = document.createElement("p");
-    const p3Content = document.createTextNode("Read/NotRead");
+    p3.setAttribute("id", "readP")
+    var bookCheck = "Not Read"
+    if(myLibrary[myLibrary.length-1].read){
+        bookCheck = "Read";
+    }
+    const p3Content = document.createTextNode(bookCheck);
     p3.appendChild(p3Content);
+
+    const removeButton = document.createElement("button");
+    buttonText = document.createTextNode("Remove");
+    removeButton.appendChild(buttonText)
+    removeButton.setAttribute("id", "removeButton")
+
 
     newCard.appendChild(newCardDiv);
     newCard.appendChild(p1)
     newCard.appendChild(p2)
     newCard.appendChild(p3)
+    newCard.appendChild(removeButton)
+
+    newCard.setAttribute("data-index", myLibrary.length)
+
 
     //append card to main content
     const latestElement = document.getElementById("bookDisplay");
@@ -187,4 +276,7 @@ document.addEventListener('click',function(e){
  }
 
 addBookToLibrary(myLibrary);
-displayCards();
+if(typeof myLibrary !== 'undefined'){
+    displayCards();
+    console.log(myLibrary.length)
+}
