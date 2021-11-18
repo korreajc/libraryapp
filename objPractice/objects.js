@@ -3,18 +3,42 @@ let myLibrary = [
    
 ];
 
+
 function Book(title, author, pages, read){
-    this.title = title;
-    this.author = author;
-    this.pages = pages;
-    this.read = read;
+    this.title = title; //string
+    this.author = author; //string
+    this.pages = pages; //int
+    this.read = read;   //boolean
 }
+
+
 
 
 function addBookToLibrary(objArr){
     for(let i = 0; i < objArr.length; i++){
         console.log(objArr[i].title + ", by " + objArr[i].author + " contains "+ objArr[i].pages + " pages.")
+        console.log(objArr[i].read);
     }
+}
+
+function modifyStats(){
+    //get elements
+    const booksRead = document.getElementById("bookStats");
+    const pagesRead = document.getElementById("pagesReadStats");
+    let counter = myLibrary.length;
+    for(let i = 0;i < myLibrary.length;i++){
+        if(!myLibrary[i].read){
+            counter--;
+        }
+    }
+
+    let sum = 0;
+    for(let i = 0; i < myLibrary.length;i++){
+        sum += parseInt(myLibrary[i].pages);
+    }
+    let totalBooksRead = counter;
+    booksRead.innerHTML = totalBooksRead;
+    pagesRead.innerHTML = sum;
 }
 
 
@@ -130,6 +154,8 @@ document.addEventListener('click',function(e){
         addBookToLibrary(myLibrary);
         deleteTemp();
         createCard();
+        modifyStats();
+
      }
  });
 
@@ -142,8 +168,7 @@ document.addEventListener('click',function(e){
           parentDiv.remove();
           console.log("------")
           addBookToLibrary(myLibrary);
-
-
+          modifyStats();
      }
  });
 
@@ -153,16 +178,24 @@ document.addEventListener('click',function(e){
         var div = e.target;
         div.innerHTML = "Read"
         div.id = "readP"
-     }
- })
-
- document.addEventListener('click',function(e){
-    if(e.target && e.target.id== 'readP'){
+        let index = e.target;
+        let newIndex = index.parentNode
+        let indexTwo = newIndex.getAttribute('data-index')
+        myLibrary[indexTwo-1].read = true;
+        modifyStats();
+     }else if(e.target && e.target.id== 'readP'){
         var div = e.target;
         div.innerHTML = "Not Read"
         div.id = "notReadP"
+        let index = e.target;
+        let newIndex = index.parentNode
+        let indexTwo = parseInt(newIndex.getAttribute('data-index'))
+        myLibrary[indexTwo-1].read = false;
+        modifyStats();
+
      }
- });
+ })
+
 
 
 
@@ -248,9 +281,13 @@ document.addEventListener('click',function(e){
 
     const p3 = document.createElement("p");
     p3.setAttribute("id", "readP")
-    var bookCheck = "Not Read"
+    var bookCheck;
     if(myLibrary[myLibrary.length-1].read){
         bookCheck = "Read";
+        myLibrary[myLibrary.length-1].read = true;
+    }else{
+        bookCheck = "Not Read";
+        myLibrary[myLibrary.length-1].read = false;
     }
     const p3Content = document.createTextNode(bookCheck);
     p3.appendChild(p3Content);
@@ -274,6 +311,7 @@ document.addEventListener('click',function(e){
     const latestElement = document.getElementById("bookDisplay");
     latestElement.appendChild(newCard);
  }
+
 
 addBookToLibrary(myLibrary);
 if(typeof myLibrary !== 'undefined'){
